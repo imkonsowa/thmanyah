@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS categories
     type        category_type NOT NULL,
     created_at  TIMESTAMP DEFAULT NOW(),
     updated_at  TIMESTAMP DEFAULT NOW(),
-    created_by  VARCHAR(255),
+    created_by  UUID  NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     metadata    JSONB     DEFAULT '{}'::jsonb,
     UNIQUE (name)
 );
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS categories
 CREATE TABLE IF NOT EXISTS programs
 (
     id             UUID PRIMARY KEY,
-    title          text   NOT NULL,
+    title          text           NOT NULL,
     description    TEXT,
     category_id    UUID           NOT NULL REFERENCES categories (id),
     status         program_status NOT NULL DEFAULT 'PROGRAM_STATUS_DRAFT',
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS episodes
 (
     id               UUID PRIMARY KEY,
     program_id       UUID           NOT NULL REFERENCES programs (id) ON DELETE CASCADE,
-    title            TEXT   NOT NULL,
+    title            TEXT           NOT NULL,
     description      TEXT,
     duration_seconds INTEGER                 DEFAULT 0,
     episode_number   INTEGER        NOT NULL,
