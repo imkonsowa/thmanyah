@@ -17,6 +17,8 @@ Golang-based content management system with gRPC/HTTP APIs for media and podcast
   - [Full Journey Test](#full-journey-test)
   - [Future Improvements](#future-improvements)
 
+> **⚠️ Development Notice**: This repository includes JWT private/public keys in the `keys/` directory for easy development setup. **DO NOT use these keys in production environments**. Generate new keys for production deployments.
+
 ## Features
 
 - **File Upload**: S3-compatible storage for episode thumbnails and media files via MinIO
