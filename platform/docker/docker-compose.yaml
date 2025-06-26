@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=123456789
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=thmanyah
+    restart: unless-stopped
+    volumes:
+      - thmanyah-data:/var/lib/postgresql/data
+      - ../sql:/docker-entrypoint-initdb.d
+    networks:
+      - thmanyah
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    environment:
+      - CONFIG_DB_HOST=postgres # this automatically mapped to config as DB_HOST and so on for other environment variables
+      - CONFIG_DB_PASSWORD=123456789
+      - CONFIG_S3_HOST=minio:9001
+      - CONFIG_S3_ACCESS_KEY=admin
+      - CONFIG_S3_SECRET_KEY=123456789
+    image: thmanyah-api:latest # the image must be built first, running `make start` build the image and run the app
+    restart: unless-stopped
+    networks:
+      - thmanyah
+    depends_on:
+      postgres:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  minio:
+    image: quay.io/minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=123456789
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    networks:
+      - thmanyah
+    volumes:
+      - minio-data:/data
+
+networks:
+  thmanyah:
+    driver: bridge
+
+volumes:
+  thmanyah-data:
+  minio-data:
+

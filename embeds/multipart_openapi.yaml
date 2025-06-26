@@ -1,0 +1,61 @@
+openapi: 3.0.1
+info:
+  title: ""
+  version: 0.0.1
+paths:
+  /api/v1/cms/episodes/upload:
+    post:
+      tags:
+        - CmsService
+      summary: "Since proto buffers don't support multipart, this endpoint allows users to upload media files for episodes."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - file
+                - episode_id
+                - target
+              properties:
+                target:
+                  type: string
+                  enum:
+                    - media
+                    - thumbnail
+                file:
+                  type: string
+                  format: binary
+                episode_id:
+                  type: string
+          application/octet-stream:
+            schema:
+              required:
+                - file
+                - episode_id
+              properties:
+                file:
+                  type: string
+                  format: binary
+                episode_id:
+                  type: string
+        required: true
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: File uploaded successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/upload_serviceBasicSuccessMessageResponse'
+        400:
+          description: Given upload file is invalid
+        500:
+          description: Internal server error
+components:
+  schemas:
+    upload_serviceBasicSuccessMessageResponse:
+      type: object
+      properties:
+        file_url:
+          type: string

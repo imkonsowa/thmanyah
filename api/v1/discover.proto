@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package thmanyah.v1;
+
+import "google/api/annotations.proto";
+import "v1/cms.proto";
+import "openapi/v3/annotations.proto";
+
+option go_package = "thmanyah/api/v1;v1";
+
+service DiscoverService {
+  rpc Featured(FeaturedRequest) returns (FeaturedResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/discover/featured"
+    };
+    option (openapi.v3.operation) = {
+      description: "Returns a list of featured programs that are published"
+    };
+  }
+  rpc Search(SearchRequest) returns (SearchResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/discover/search"
+      body: "*"
+    };
+  }
+}
+
+message SearchRequest {
+  string query = 1 [json_name = "query"];
+  int32 page = 2 [json_name = "page"];
+  int32 page_size = 3 [json_name = "page_size"];
+}
+
+message SearchResponse {
+  repeated Category categories = 1 [json_name = "categories"];
+  repeated Program programs = 2 [json_name = "programs"];
+  repeated Episode episodes = 3 [json_name = "episodes"];
+  int32 total_count = 4 [json_name = "total_count"];
+  int32 page = 5 [json_name = "page"];
+  int32 page_size = 6 [json_name = "page_size"];
+  int32 total_pages = 7 [json_name = "total_pages"];
+}
+
+message FeaturedRequest {
+
+}
+
+message FeaturedResponse {
+  repeated Program programs = 1 [json_name = "programs"];
+}

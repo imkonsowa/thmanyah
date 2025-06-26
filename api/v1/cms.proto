@@ -1,0 +1,939 @@
+syntax = "proto3";
+
+package thmanyah.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "openapi/v3/annotations.proto";
+
+option go_package = "thmanyah/api/v1;v1";
+
+option (openapi.v3.document) = {
+  components: {
+    security_schemes: {
+      additional_properties: {
+        name: "bearerAuth"
+        value: {
+          security_scheme: {
+            type: "http"
+            scheme: "bearer"
+            bearer_format: "JWT"
+            description: "Enter JWT Bearer token"
+          }
+        }
+      }
+    }
+  }
+};
+
+service CmsService {
+  rpc CreateProgram(CreateProgramRequest) returns (CreateProgramResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cms/programs"
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Create a new program"
+      description: "Creates a new program with the provided details including title, description, category, and metadata."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc UpdateProgram(UpdateProgramRequest) returns (UpdateProgramResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/cms/programs/{program_id}"
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Update an existing program"
+      description: "Updates an existing program with new information. Only provided fields will be updated."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          },
+          {
+            name: "404"
+            value: {
+              response: {
+                description: "Program not found"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc DeleteProgram(DeleteProgramRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/cms/programs/{program_id}"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Delete a program"
+      description: "Permanently deletes a program and all its associated episodes."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          },
+          {
+            name: "404"
+            value: {
+              response: {
+                description: "Program not found"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc GetProgram(GetProgramRequest) returns (GetProgramResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cms/programs/{program_id}"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Get a specific program"
+      description: "Retrieves detailed information about a specific program by its ID."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          },
+          {
+            name: "404"
+            value: {
+              response: {
+                description: "Program not found"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc ListPrograms(ListProgramsRequest) returns (ListProgramsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cms/programs"
+    };
+    option (openapi.v3.operation) = {
+      summary: "List programs"
+      description: "Retrieves a paginated list of programs with optional filtering by category, status, tags, and search query."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc CreateCategory(CreateCategoryRequest) returns (CreateCategoryResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cms/categories"
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Create a new category"
+      description: "Creates a new category for organizing programs with specified type and metadata."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc UpdateCategory(UpdateCategoryRequest) returns (UpdateCategoryResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/cms/categories/{category_id}"
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Update an existing category"
+      description: "Updates an existing category with new information. Only provided fields will be updated."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          },
+          {
+            name: "404"
+            value: {
+              response: {
+                description: "Category not found"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc DeleteCategory(DeleteCategoryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/cms/categories/{category_id}"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Delete a category"
+      description: "Permanently deletes a category. Programs in this category will need to be reassigned."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          },
+          {
+            name: "404"
+            value: {
+              response: {
+                description: "Category not found"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc GetCategory(GetCategoryRequest) returns (GetCategoryResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cms/categories/{category_id}"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Get a specific category"
+      description: "Retrieves detailed information about a specific category by its ID."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          },
+          {
+            name: "404"
+            value: {
+              response: {
+                description: "Category not found"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc ListCategories(ListCategoriesRequest) returns (ListCategoriesResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cms/categories"
+    };
+    option (openapi.v3.operation) = {
+      summary: "List categories"
+      description: "Retrieves a paginated list of categories with optional filtering by type and search query."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc CreateEpisode(CreateEpisodeRequest) returns (CreateEpisodeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cms/episodes"
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Create a new episode"
+      description: "Creates a new episode for a specific program with media URL, duration, and episode details."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc UpdateEpisode(UpdateEpisodeRequest) returns (UpdateEpisodeResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/cms/episodes/{episode_id}"
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Update an existing episode"
+      description: "Updates an existing episode with new information. Only provided fields will be updated."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          },
+          {
+            name: "404"
+            value: {
+              response: {
+                description: "Episode not found"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc DeleteEpisode(DeleteEpisodeRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/cms/episodes/{episode_id}"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Delete an episode"
+      description: "Permanently deletes an episode from a program."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          },
+          {
+            name: "404"
+            value: {
+              response: {
+                description: "Episode not found"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc GetEpisode(GetEpisodeRequest) returns (GetEpisodeResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cms/episodes/{episode_id}"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Get a specific episode"
+      description: "Retrieves detailed information about a specific episode by its ID."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          },
+          {
+            name: "404"
+            value: {
+              response: {
+                description: "Episode not found"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc ListEpisodes(ListEpisodesRequest) returns (ListEpisodesResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/cms/programs/{program_id}/episodes"
+    };
+    option (openapi.v3.operation) = {
+      summary: "List episodes for a program"
+      description: "Retrieves a paginated list of episodes for a specific program with optional filtering by status, season, and search query."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc ImportData(ImportDataRequest) returns (ImportDataResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cms/import"
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Import data from external sources"
+      description: "Imports programs and episodes from external sources like YouTube, RSS feeds, JSON, or CSV files with configurable field mapping."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc BulkUpdatePrograms(BulkUpdateProgramsRequest) returns (BulkUpdateProgramsResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/cms/programs/bulk-update"
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Bulk update programs"
+      description: "Updates multiple programs at once with the same changes, useful for batch operations like changing status or category."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+
+  rpc BulkDeletePrograms(BulkDeleteProgramsRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/cms/programs/bulk-delete"
+      body: "*"
+    };
+    option (openapi.v3.operation) = {
+      summary: "Bulk delete programs"
+      description: "Permanently deletes multiple programs at once, including all their associated episodes."
+      security: {
+        additional_properties: {
+          name: "bearerAuth"
+          value: {}
+        }
+      }
+      responses: {
+        response_or_reference: [
+          {
+            name: "400"
+            value: {
+              response: {
+                description: "Bad Request - Validation failed"
+              }
+            }
+          }
+        ]
+      }
+    };
+  }
+}
+
+enum CategoryType {
+  CATEGORY_TYPE_PODCAST = 0;
+  CATEGORY_TYPE_DOCUMENTARY = 1;
+  CATEGORY_TYPE_SPORTS_EVENT = 2;
+  CATEGORY_TYPE_EDUCATIONAL = 3;
+  CATEGORY_TYPE_NEWS = 4;
+  CATEGORY_TYPE_ENTERTAINMENT = 5;
+}
+
+enum ProgramStatus {
+  PROGRAM_STATUS_DRAFT = 0;
+  PROGRAM_STATUS_PUBLISHED = 1;
+  PROGRAM_STATUS_ARCHIVED = 2;
+}
+
+enum EpisodeStatus {
+  EPISODE_STATUS_DRAFT = 0;
+  EPISODE_STATUS_PUBLISHED = 1;
+  EPISODE_STATUS_SCHEDULED = 2;
+  EPISODE_STATUS_ARCHIVED = 3;
+}
+
+enum ImportStatus {
+  IMPORT_STATUS_PENDING = 0;
+  IMPORT_STATUS_PROCESSING = 1;
+  IMPORT_STATUS_COMPLETED = 2;
+  IMPORT_STATUS_FAILED = 3;
+}
+
+message Category {
+  string id = 1 [json_name="id"];
+  string name = 2 [json_name="name", (validate.rules).string.min_len = 1];
+  string description = 3 [json_name="description"];
+  CategoryType type = 4 [json_name="type"];
+  google.protobuf.Timestamp created_at = 5 [json_name="created_at"];
+  google.protobuf.Timestamp updated_at = 6 [json_name="updated_at"];
+  string created_by = 7 [json_name="created_by"];
+  map<string, string> metadata = 8 [json_name="metadata"];
+}
+
+message Program {
+  string id = 1 [json_name="id"];
+  string title = 2 [json_name="title", (validate.rules).string.min_len = 1];
+  string description = 3 [json_name="description"];
+  string category_id = 4 [(validate.rules).string.min_len = 1, json_name="category_id"];
+  ProgramStatus status = 5 [json_name="status"];
+  google.protobuf.Timestamp created_at = 6 [json_name="created_at"];
+  google.protobuf.Timestamp updated_at = 7 [json_name="updated_at"];
+  google.protobuf.Timestamp published_at = 8 [json_name="published_at"];
+  string created_by = 9 [json_name="created_by"];
+  string updated_by = 10 [json_name="updated_by"];
+  string thumbnail_url = 11 [json_name="thumbnail_url"];
+  repeated string tags = 12 [json_name="tags"];
+  map<string, string> metadata = 13 [json_name="metadata"];
+  optional string source_url = 14 [json_name="source_url"]; // Original source URL
+  int32 episodes_count = 15 [json_name="episodes_count"];
+  bool is_featured = 16 [json_name="is_featured"];
+  int32 view_count = 17 [json_name="view_count"];
+  double rating = 18 [json_name="rating"];
+}
+
+message Episode {
+  string id = 1 [json_name="id"];
+  string program_id = 2 [(validate.rules).string.min_len = 1, json_name="program_id"];
+  string title = 3 [(validate.rules).string.min_len = 1, json_name="title"];
+  string description = 4 [json_name="description"];
+  int32 duration_seconds = 5 [(validate.rules).int32.gte = 0, json_name="duration_seconds"];
+  int32 episode_number = 6 [(validate.rules).int32.gte = 1, json_name="episode_number"];
+  int32 season_number = 7 [(validate.rules).int32.gte = 1, json_name="season_number"];
+  EpisodeStatus status = 8 [json_name="status"];
+  google.protobuf.Timestamp created_at = 9 [json_name="created_at"];
+  google.protobuf.Timestamp updated_at = 10 [json_name="updated_at"];
+  google.protobuf.Timestamp published_at = 11 [json_name="published_at"];
+  google.protobuf.Timestamp scheduled_at = 12 [json_name="scheduled_at"];
+  string created_by = 13 [json_name="created_by"];
+  string updated_by = 14 [json_name="updated_by"];
+  string media_url = 15 [json_name="media_url"];
+  string thumbnail_url = 16 [json_name="thumbnail_url"];
+  repeated string tags = 17 [json_name="tags"];
+  map<string, string> metadata = 18 [json_name="metadata"];
+  int32 view_count = 19 [json_name="view_count"];
+  double rating = 20 [json_name="rating"];
+}
+
+message CreateProgramRequest {
+  string title = 1 [(validate.rules).string.min_len = 1, json_name="title"];
+  string description = 2 [json_name="description"];
+  string category_id = 3 [(validate.rules).string.min_len = 1, json_name="category_id"];
+  string thumbnail_url = 4 [json_name="thumbnail_url"];
+  repeated string tags = 5 [json_name="tags"];
+  map<string, string> metadata = 6 [json_name="metadata"];
+  string source_url = 7 [json_name="source_url"];
+  bool is_featured = 8 [json_name="is_featured"];
+}
+
+message CreateProgramResponse {
+  Program program = 1 [json_name="program"];
+}
+
+message UpdateProgramRequest {
+  string program_id = 1 [(validate.rules).string.min_len = 1, json_name="program_id"];
+  optional string title = 2 [json_name="title"];
+  optional string description = 3 [json_name="description"];
+  optional string category_id = 4 [json_name="category_id"];
+  optional ProgramStatus status = 5 [json_name="status"];
+  optional string thumbnail_url = 6 [json_name="thumbnail_url"];
+  repeated string tags = 7 [json_name="tags"];
+  map<string, string> metadata = 8 [json_name="metadata"];
+  optional string source_url = 9 [json_name="source_url"];
+  optional bool is_featured = 10 [json_name="is_featured"];
+}
+
+message UpdateProgramResponse {
+  Program program = 1 [json_name="program"];
+}
+
+message DeleteProgramRequest {
+  string program_id = 1 [(validate.rules).string.min_len = 1, json_name="program_id"];
+}
+
+message GetProgramRequest {
+  string program_id = 1 [(validate.rules).string.min_len = 1, json_name="program_id"];
+}
+
+message GetProgramResponse {
+  Program program = 1 [json_name="program"];
+}
+
+message ListProgramsRequest {
+  int32 page = 1 [ json_name="page"];
+  int32 page_size = 2 [(validate.rules).int32 = {lte: 100}, json_name="page_size"];
+  string category_id = 3 [json_name="category_id"];
+  ProgramStatus status = 4 [json_name="status"];
+  string search_query = 5 [json_name="search_query"];
+  repeated string tags = 6 [json_name="tags"];
+  string sort_by = 7 [json_name="sort_by"];
+  string sort_order = 8 [json_name="sort_order"];
+  bool featured_only = 9 [json_name="featured_only"];
+}
+
+message ListProgramsResponse {
+  repeated Program programs = 1 [json_name="programs"];
+  int32 total_count = 2 [json_name="total_count"];
+  int32 page = 3 [json_name="page"];
+  int32 page_size = 4 [json_name="page_size"];
+}
+
+message CreateCategoryRequest {
+  string name = 1 [(validate.rules).string.min_len = 1, json_name="name"];
+  string description = 2 [json_name="description"];
+  CategoryType type = 3 [json_name="type"];
+  map<string, string> metadata = 4 [json_name="metadata"];
+}
+
+message CreateCategoryResponse {
+  Category category = 1 [json_name="category"];
+}
+
+message UpdateCategoryRequest {
+  string category_id = 1 [(validate.rules).string.min_len = 1, json_name="category_id"];
+  optional string name = 2 [json_name="name"];
+  optional string description = 3 [json_name="description"];
+  optional CategoryType type = 4 [json_name="type"];
+  map<string, string> metadata = 5 [json_name="metadata"];
+}
+
+message UpdateCategoryResponse {
+  Category category = 1 [json_name="category"];
+}
+
+message DeleteCategoryRequest {
+  string category_id = 1 [(validate.rules).string.min_len = 1, json_name="category_id"];
+}
+
+message GetCategoryRequest {
+  string category_id = 1 [(validate.rules).string.min_len = 1, json_name="category_id"];
+}
+
+message GetCategoryResponse {
+  Category category = 1 [json_name="category"];
+}
+
+message ListCategoriesRequest {
+  int32 page = 1 [json_name="page"];
+  int32 page_size = 2 [(validate.rules).int32 = {lte: 100}, json_name="page_size"];
+  CategoryType type = 3 [json_name="type"];
+  bool active_only = 4 [json_name="active_only"];
+  string search_query = 5 [json_name="search_query"];
+}
+
+message ListCategoriesResponse {
+  repeated Category categories = 1 [json_name="categories"];
+  int32 total_count = 2 [json_name="total_count"];
+  int32 page = 3 [json_name="page"];
+  int32 page_size = 4 [json_name="page_size"];
+}
+
+message CreateEpisodeRequest {
+  string program_id = 1 [(validate.rules).string.min_len = 1, json_name="program_id"];
+  string title = 2 [(validate.rules).string.min_len = 1, json_name="title"];
+  string description = 3 [json_name="description"];
+  int32 duration_seconds = 4 [(validate.rules).int32.gte = 0, json_name="duration_seconds"];
+  int32 episode_number = 5 [(validate.rules).int32.gte = 1, json_name="episode_number"];
+  int32 season_number = 6 [(validate.rules).int32.gte = 1, json_name="season_number"];
+  string media_url = 7 [json_name="media_url"];
+  string thumbnail_url = 8 [json_name="thumbnail_url"];
+  repeated string tags = 9 [json_name="tags"];
+  map<string, string> metadata = 10 [json_name="metadata"];
+}
+
+message CreateEpisodeResponse {
+  Episode episode = 1 [json_name="episode"];
+}
+
+message UpdateEpisodeRequest {
+  string episode_id = 1 [(validate.rules).string.min_len = 1, json_name="episode_id"];
+  optional string title = 2 [json_name="title"];
+  optional string description = 3 [json_name="description"];
+  optional int32 duration_seconds = 4 [json_name="duration_seconds"];
+  optional int32 episode_number = 5 [json_name="episode_number"];
+  optional int32 season_number = 6 [json_name="season_number"];
+  optional EpisodeStatus status = 7 [json_name="status"];
+  optional string media_url = 8 [json_name="media_url"];
+  optional string thumbnail_url = 9 [json_name="thumbnail_url"];
+  repeated string tags = 10 [json_name="tags"];
+  map<string, string> metadata = 11 [json_name="metadata"];
+  optional google.protobuf.Timestamp scheduled_at = 12 [json_name="scheduled_at"];
+}
+
+message UpdateEpisodeResponse {
+  Episode episode = 1 [json_name="episode"];
+}
+
+message DeleteEpisodeRequest {
+  string episode_id = 1 [(validate.rules).string.min_len = 1, json_name="episode_id"];
+}
+
+message GetEpisodeRequest {
+  string episode_id = 1 [(validate.rules).string.min_len = 1, json_name="episode_id"];
+}
+
+message GetEpisodeResponse {
+  Episode episode = 1 [json_name="episode"];
+}
+
+message ListEpisodesRequest {
+  string program_id = 1 [(validate.rules).string.min_len = 1, json_name="program_id"];
+  int32 page = 2 [ json_name="page"];
+  int32 page_size = 3 [(validate.rules).int32 = {lte: 100}, json_name="page_size"];
+  EpisodeStatus status = 4 [json_name="status"];
+  string search_query = 5 [json_name="search_query"];
+  int32 season_number = 6 [json_name="season_number"];
+  string sort_by = 7 [json_name="sort_by"];
+  string sort_order = 8 [json_name="sort_order"];
+}
+
+message ListEpisodesResponse {
+  repeated Episode episodes = 1 [json_name="episodes"];
+  int32 total_count = 2 [json_name="total_count"];
+  int32 page = 3 [json_name="page"];
+  int32 page_size = 4 [json_name="page_size"];
+}
+
+message ImportDataRequest {
+  string source_type = 1 [(validate.rules).string.min_len = 1, json_name="source_type"]; // youtube, rss, json, csv
+  string source_url = 2 [json_name="source_url"];
+  map<string, string> source_config = 3 [json_name="source_config"]; // API keys, credentials, etc.
+  string default_category_id = 4 [json_name="default_category_id"];
+  bool dry_run = 5 [json_name="dry_run"]; // If true, validate but don't import
+  map<string, string> field_mapping = 6 [json_name="field_mapping"]; // Map source fields to our fields
+}
+
+message ImportDataResponse {
+  string import_id = 1 [json_name="import_id"];
+  ImportStatus status = 2 [json_name="status"];
+  string message = 3 [json_name="message"];
+  int32 total_items = 4 [json_name="total_items"];
+  int32 processed_items = 5 [json_name="processed_items"];
+  int32 success_count = 6 [json_name="success_count"];
+  int32 error_count = 7 [json_name="error_count"];
+  repeated string warnings = 9 [json_name="warnings"];
+}
+
+message BulkUpdateProgramsRequest {
+  repeated string program_ids = 1 [json_name="program_ids", (validate.rules).repeated.min_items = 1];
+  ProgramStatus status = 2 [json_name="status"];
+  string category_id = 3 [json_name="category_id"];
+  repeated string tags = 4 [json_name="tags"];
+  map<string, string> metadata = 5 [json_name="metadata"];
+  bool is_featured = 6 [json_name="is_featured"];
+}
+
+message BulkUpdateProgramsResponse {
+  int32 updated_count = 1 [json_name="updated_count"];
+  int32 failed_count = 2 [json_name="failed_count"];
+  repeated string errors = 3 [json_name="errors"];
+}
+
+message BulkDeleteProgramsRequest {
+  repeated string program_ids = 1 [json_name="program_ids", (validate.rules).repeated.min_items = 1];
+}
+
+message PaginationMetadata {
+  int32 page = 1 [json_name="page"];
+  int32 page_size = 2 [json_name="page_size"];
+  int32 total_count = 3 [json_name="total_count"];
+  int32 total_pages = 4 [json_name="total_pages"];
+}
+
+message SortOptions {
+  string field = 1 [json_name="field"];
+  string direction = 2 [json_name="direction"];
+}
+
+message FilterOptions {
+  map<string, google.protobuf.Any> filters = 1 [json_name="filters"];
+}
+
+message EpisodeFileUpdateResponse {
+  string file_url = 1;
+}

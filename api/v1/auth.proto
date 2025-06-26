@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package thmanyah.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "thmanyah/api/v1;v1";
+
+service AuthService {
+  rpc Login (LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/login",
+      body: "*"
+    };
+  }
+
+  rpc Register (RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/register",
+      body: "*"
+    };
+  }
+
+  rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/refresh-token",
+      body: "*"
+    };
+  }
+
+  rpc GetUserProfile (google.protobuf.Empty) returns (UserProfileResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/auth/profile",
+    };
+  }
+
+
+  rpc UpdateUserProfile (UpdateUserRequest) returns (UpdateUserResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/auth/profile",
+      body: "*"
+    };
+  }
+}
+
+message LoginRequest {
+  string email = 1 [json_name="email", (validate.rules).string.min_len = 1, (validate.rules).string.max_len = 128, (validate.rules).string.pattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"];
+  string password = 2 [json_name="password", (validate.rules).string.min_len = 6, (validate.rules).string.max_len = 32];
+}
+
+message LoginResponse {
+  string access_token = 1 [json_name = "access_token"];
+  User user = 2 [json_name="user"];
+}
+
+message RegisterRequest {
+  string email = 1 [json_name="email", (validate.rules).string.min_len = 1, (validate.rules).string.max_len = 128, (validate.rules).string.pattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"];
+  string password = 2 [json_name="password", (validate.rules).string.min_len = 6, (validate.rules).string.max_len = 32];
+  string confirm_password = 3 [json_name = "confirm_password", (validate.rules).string.min_len = 6, (validate.rules).string.max_len = 32];
+  string name = 4 [json_name="name", (validate.rules).string.min_len = 1, (validate.rules).string.max_len = 128];
+}
+
+message RegisterResponse {
+  string access_token = 1 [json_name = "access_token"];
+  User user = 2 [json_name="user"];
+}
+
+message RefreshTokenRequest {
+  string refresh_token = 1 [json_name = "refresh_token"];
+}
+
+message RefreshTokenResponse {
+  string access_token = 1 [json_name = "access_token"];
+  string refresh_token = 2 [json_name = "refresh_token"];
+}
+
+message Socials {
+  string twitter = 1 [json_name="twitter"];
+  string github = 2 [json_name="github"];
+  string linkedin = 3 [json_name="linkedin"];
+}
+
+message User {
+  string id = 1 [json_name="id"];
+  string name = 2 [json_name="name"];
+  string email = 3 [json_name="email"];
+  string created_at = 4 [json_name = "created_at"];
+  string updated_at = 5 [json_name = "updated_at"];
+}
+
+message UserProfileRequest {
+  string name = 1 [json_name="name"];
+  string positions = 2 [json_name="positions"];
+  string email = 3 [json_name="email"];
+  Socials socials = 4 [json_name="socials"];
+}
+
+message UserProfileResponse {
+  User user = 1 [json_name="user"];
+}
+
+message UpdateUserRequest {
+  string name = 1 [json_name="name"];
+  string position = 2 [json_name="position"];
+  Socials socials = 3 [json_name="socials"];
+}
+
+message UpdateUserResponse {
+  User user = 1 [json_name="user"];
+}
+

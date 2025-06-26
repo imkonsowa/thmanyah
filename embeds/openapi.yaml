@@ -1,0 +1,1320 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /api/v1/auth/login:
+        post:
+            tags:
+                - AuthService
+            operationId: AuthService_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.LoginResponse'
+    /api/v1/auth/profile:
+        get:
+            tags:
+                - AuthService
+            operationId: AuthService_GetUserProfile
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.UserProfileResponse'
+        put:
+            tags:
+                - AuthService
+            operationId: AuthService_UpdateUserProfile
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.UpdateUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.UpdateUserResponse'
+    /api/v1/auth/refresh-token:
+        post:
+            tags:
+                - AuthService
+            operationId: AuthService_RefreshToken
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.RefreshTokenRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.RefreshTokenResponse'
+    /api/v1/auth/register:
+        post:
+            tags:
+                - AuthService
+            operationId: AuthService_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.RegisterRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.RegisterResponse'
+    /api/v1/cms/categories:
+        get:
+            tags:
+                - CmsService
+            summary: List categories
+            description: Retrieves a paginated list of categories with optional filtering by type and search query.
+            operationId: CmsService_ListCategories
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: page_size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: type
+                  in: query
+                  schema:
+                    enum:
+                        - CATEGORY_TYPE_PODCAST
+                        - CATEGORY_TYPE_DOCUMENTARY
+                        - CATEGORY_TYPE_SPORTS_EVENT
+                        - CATEGORY_TYPE_EDUCATIONAL
+                        - CATEGORY_TYPE_NEWS
+                        - CATEGORY_TYPE_ENTERTAINMENT
+                    type: string
+                    format: enum
+                - name: active_only
+                  in: query
+                  schema:
+                    type: boolean
+                - name: search_query
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.ListCategoriesResponse'
+                "400":
+                    description: Bad Request - Validation failed
+            security:
+                - bearerAuth: []
+        post:
+            tags:
+                - CmsService
+            summary: Create a new category
+            description: Creates a new category for organizing programs with specified type and metadata.
+            operationId: CmsService_CreateCategory
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.CreateCategoryRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.CreateCategoryResponse'
+                "400":
+                    description: Bad Request - Validation failed
+            security:
+                - bearerAuth: []
+    /api/v1/cms/categories/{category_id}:
+        get:
+            tags:
+                - CmsService
+            summary: Get a specific category
+            description: Retrieves detailed information about a specific category by its ID.
+            operationId: CmsService_GetCategory
+            parameters:
+                - name: category_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.GetCategoryResponse'
+                "400":
+                    description: Bad Request - Validation failed
+                "404":
+                    description: Category not found
+            security:
+                - bearerAuth: []
+        put:
+            tags:
+                - CmsService
+            summary: Update an existing category
+            description: Updates an existing category with new information. Only provided fields will be updated.
+            operationId: CmsService_UpdateCategory
+            parameters:
+                - name: category_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.UpdateCategoryRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.UpdateCategoryResponse'
+                "400":
+                    description: Bad Request - Validation failed
+                "404":
+                    description: Category not found
+            security:
+                - bearerAuth: []
+        delete:
+            tags:
+                - CmsService
+            summary: Delete a category
+            description: Permanently deletes a category. Programs in this category will need to be reassigned.
+            operationId: CmsService_DeleteCategory
+            parameters:
+                - name: category_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+                "400":
+                    description: Bad Request - Validation failed
+                "404":
+                    description: Category not found
+            security:
+                - bearerAuth: []
+    /api/v1/cms/episodes:
+        post:
+            tags:
+                - CmsService
+            summary: Create a new episode
+            description: Creates a new episode for a specific program with media URL, duration, and episode details.
+            operationId: CmsService_CreateEpisode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.CreateEpisodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.CreateEpisodeResponse'
+                "400":
+                    description: Bad Request - Validation failed
+            security:
+                - bearerAuth: []
+    /api/v1/cms/episodes/{episode_id}:
+        get:
+            tags:
+                - CmsService
+            summary: Get a specific episode
+            description: Retrieves detailed information about a specific episode by its ID.
+            operationId: CmsService_GetEpisode
+            parameters:
+                - name: episode_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.GetEpisodeResponse'
+                "400":
+                    description: Bad Request - Validation failed
+                "404":
+                    description: Episode not found
+            security:
+                - bearerAuth: []
+        put:
+            tags:
+                - CmsService
+            summary: Update an existing episode
+            description: Updates an existing episode with new information. Only provided fields will be updated.
+            operationId: CmsService_UpdateEpisode
+            parameters:
+                - name: episode_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.UpdateEpisodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.UpdateEpisodeResponse'
+                "400":
+                    description: Bad Request - Validation failed
+                "404":
+                    description: Episode not found
+            security:
+                - bearerAuth: []
+        delete:
+            tags:
+                - CmsService
+            summary: Delete an episode
+            description: Permanently deletes an episode from a program.
+            operationId: CmsService_DeleteEpisode
+            parameters:
+                - name: episode_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+                "400":
+                    description: Bad Request - Validation failed
+                "404":
+                    description: Episode not found
+            security:
+                - bearerAuth: []
+    /api/v1/cms/import:
+        post:
+            tags:
+                - CmsService
+            summary: Import data from external sources
+            description: Imports programs and episodes from external sources like YouTube, RSS feeds, JSON, or CSV files with configurable field mapping.
+            operationId: CmsService_ImportData
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.ImportDataRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.ImportDataResponse'
+                "400":
+                    description: Bad Request - Validation failed
+            security:
+                - bearerAuth: []
+    /api/v1/cms/programs:
+        get:
+            tags:
+                - CmsService
+            summary: List programs
+            description: Retrieves a paginated list of programs with optional filtering by category, status, tags, and search query.
+            operationId: CmsService_ListPrograms
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: page_size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: category_id
+                  in: query
+                  schema:
+                    type: string
+                - name: status
+                  in: query
+                  schema:
+                    enum:
+                        - PROGRAM_STATUS_DRAFT
+                        - PROGRAM_STATUS_PUBLISHED
+                        - PROGRAM_STATUS_ARCHIVED
+                    type: string
+                    format: enum
+                - name: search_query
+                  in: query
+                  schema:
+                    type: string
+                - name: tags
+                  in: query
+                  schema:
+                    type: array
+                    items:
+                        type: string
+                - name: sort_by
+                  in: query
+                  schema:
+                    type: string
+                - name: sort_order
+                  in: query
+                  schema:
+                    type: string
+                - name: featured_only
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.ListProgramsResponse'
+                "400":
+                    description: Bad Request - Validation failed
+            security:
+                - bearerAuth: []
+        post:
+            tags:
+                - CmsService
+            summary: Create a new program
+            description: Creates a new program with the provided details including title, description, category, and metadata.
+            operationId: CmsService_CreateProgram
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.CreateProgramRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.CreateProgramResponse'
+                "400":
+                    description: Bad Request - Validation failed
+            security:
+                - bearerAuth: []
+    /api/v1/cms/programs/bulk-delete:
+        post:
+            tags:
+                - CmsService
+            summary: Bulk delete programs
+            description: Permanently deletes multiple programs at once, including all their associated episodes.
+            operationId: CmsService_BulkDeletePrograms
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.BulkDeleteProgramsRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+                "400":
+                    description: Bad Request - Validation failed
+            security:
+                - bearerAuth: []
+    /api/v1/cms/programs/bulk-update:
+        post:
+            tags:
+                - CmsService
+            summary: Bulk update programs
+            description: Updates multiple programs at once with the same changes, useful for batch operations like changing status or category.
+            operationId: CmsService_BulkUpdatePrograms
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.BulkUpdateProgramsRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.BulkUpdateProgramsResponse'
+                "400":
+                    description: Bad Request - Validation failed
+            security:
+                - bearerAuth: []
+    /api/v1/cms/programs/{program_id}:
+        get:
+            tags:
+                - CmsService
+            summary: Get a specific program
+            description: Retrieves detailed information about a specific program by its ID.
+            operationId: CmsService_GetProgram
+            parameters:
+                - name: program_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.GetProgramResponse'
+                "400":
+                    description: Bad Request - Validation failed
+                "404":
+                    description: Program not found
+            security:
+                - bearerAuth: []
+        put:
+            tags:
+                - CmsService
+            summary: Update an existing program
+            description: Updates an existing program with new information. Only provided fields will be updated.
+            operationId: CmsService_UpdateProgram
+            parameters:
+                - name: program_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.UpdateProgramRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.UpdateProgramResponse'
+                "400":
+                    description: Bad Request - Validation failed
+                "404":
+                    description: Program not found
+            security:
+                - bearerAuth: []
+        delete:
+            tags:
+                - CmsService
+            summary: Delete a program
+            description: Permanently deletes a program and all its associated episodes.
+            operationId: CmsService_DeleteProgram
+            parameters:
+                - name: program_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+                "400":
+                    description: Bad Request - Validation failed
+                "404":
+                    description: Program not found
+            security:
+                - bearerAuth: []
+    /api/v1/cms/programs/{program_id}/episodes:
+        get:
+            tags:
+                - CmsService
+            summary: List episodes for a program
+            description: Retrieves a paginated list of episodes for a specific program with optional filtering by status, season, and search query.
+            operationId: CmsService_ListEpisodes
+            parameters:
+                - name: program_id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: page_size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: status
+                  in: query
+                  schema:
+                    enum:
+                        - EPISODE_STATUS_DRAFT
+                        - EPISODE_STATUS_PUBLISHED
+                        - EPISODE_STATUS_SCHEDULED
+                        - EPISODE_STATUS_ARCHIVED
+                    type: string
+                    format: enum
+                - name: search_query
+                  in: query
+                  schema:
+                    type: string
+                - name: season_number
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: sort_by
+                  in: query
+                  schema:
+                    type: string
+                - name: sort_order
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.ListEpisodesResponse'
+                "400":
+                    description: Bad Request - Validation failed
+            security:
+                - bearerAuth: []
+    /api/v1/discover/featured:
+        get:
+            tags:
+                - DiscoverService
+            description: Returns a list of featured programs that are published
+            operationId: DiscoverService_Featured
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.FeaturedResponse'
+    /api/v1/discover/search:
+        post:
+            tags:
+                - DiscoverService
+            operationId: DiscoverService_Search
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/thmanyah.v1.SearchRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/thmanyah.v1.SearchResponse'
+components:
+    schemas:
+        thmanyah.v1.BulkDeleteProgramsRequest:
+            type: object
+            properties:
+                program_ids:
+                    type: array
+                    items:
+                        type: string
+        thmanyah.v1.BulkUpdateProgramsRequest:
+            type: object
+            properties:
+                program_ids:
+                    type: array
+                    items:
+                        type: string
+                status:
+                    enum:
+                        - PROGRAM_STATUS_DRAFT
+                        - PROGRAM_STATUS_PUBLISHED
+                        - PROGRAM_STATUS_ARCHIVED
+                    type: string
+                    format: enum
+                category_id:
+                    type: string
+                tags:
+                    type: array
+                    items:
+                        type: string
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+                is_featured:
+                    type: boolean
+        thmanyah.v1.BulkUpdateProgramsResponse:
+            type: object
+            properties:
+                updated_count:
+                    type: integer
+                    format: int32
+                failed_count:
+                    type: integer
+                    format: int32
+                errors:
+                    type: array
+                    items:
+                        type: string
+        thmanyah.v1.Category:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+                type:
+                    enum:
+                        - CATEGORY_TYPE_PODCAST
+                        - CATEGORY_TYPE_DOCUMENTARY
+                        - CATEGORY_TYPE_SPORTS_EVENT
+                        - CATEGORY_TYPE_EDUCATIONAL
+                        - CATEGORY_TYPE_NEWS
+                        - CATEGORY_TYPE_ENTERTAINMENT
+                    type: string
+                    format: enum
+                created_at:
+                    type: string
+                    format: date-time
+                updated_at:
+                    type: string
+                    format: date-time
+                created_by:
+                    type: string
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+        thmanyah.v1.CreateCategoryRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                description:
+                    type: string
+                type:
+                    enum:
+                        - CATEGORY_TYPE_PODCAST
+                        - CATEGORY_TYPE_DOCUMENTARY
+                        - CATEGORY_TYPE_SPORTS_EVENT
+                        - CATEGORY_TYPE_EDUCATIONAL
+                        - CATEGORY_TYPE_NEWS
+                        - CATEGORY_TYPE_ENTERTAINMENT
+                    type: string
+                    format: enum
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+        thmanyah.v1.CreateCategoryResponse:
+            type: object
+            properties:
+                category:
+                    $ref: '#/components/schemas/thmanyah.v1.Category'
+        thmanyah.v1.CreateEpisodeRequest:
+            type: object
+            properties:
+                program_id:
+                    type: string
+                title:
+                    type: string
+                description:
+                    type: string
+                duration_seconds:
+                    type: integer
+                    format: int32
+                episode_number:
+                    type: integer
+                    format: int32
+                season_number:
+                    type: integer
+                    format: int32
+                media_url:
+                    type: string
+                thumbnail_url:
+                    type: string
+                tags:
+                    type: array
+                    items:
+                        type: string
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+        thmanyah.v1.CreateEpisodeResponse:
+            type: object
+            properties:
+                episode:
+                    $ref: '#/components/schemas/thmanyah.v1.Episode'
+        thmanyah.v1.CreateProgramRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                description:
+                    type: string
+                category_id:
+                    type: string
+                thumbnail_url:
+                    type: string
+                tags:
+                    type: array
+                    items:
+                        type: string
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+                source_url:
+                    type: string
+                is_featured:
+                    type: boolean
+        thmanyah.v1.CreateProgramResponse:
+            type: object
+            properties:
+                program:
+                    $ref: '#/components/schemas/thmanyah.v1.Program'
+        thmanyah.v1.Episode:
+            type: object
+            properties:
+                id:
+                    type: string
+                program_id:
+                    type: string
+                title:
+                    type: string
+                description:
+                    type: string
+                duration_seconds:
+                    type: integer
+                    format: int32
+                episode_number:
+                    type: integer
+                    format: int32
+                season_number:
+                    type: integer
+                    format: int32
+                status:
+                    enum:
+                        - EPISODE_STATUS_DRAFT
+                        - EPISODE_STATUS_PUBLISHED
+                        - EPISODE_STATUS_SCHEDULED
+                        - EPISODE_STATUS_ARCHIVED
+                    type: string
+                    format: enum
+                created_at:
+                    type: string
+                    format: date-time
+                updated_at:
+                    type: string
+                    format: date-time
+                published_at:
+                    type: string
+                    format: date-time
+                scheduled_at:
+                    type: string
+                    format: date-time
+                created_by:
+                    type: string
+                updated_by:
+                    type: string
+                media_url:
+                    type: string
+                thumbnail_url:
+                    type: string
+                tags:
+                    type: array
+                    items:
+                        type: string
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+                view_count:
+                    type: integer
+                    format: int32
+                rating:
+                    type: number
+                    format: double
+        thmanyah.v1.FeaturedResponse:
+            type: object
+            properties:
+                programs:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/thmanyah.v1.Program'
+        thmanyah.v1.GetCategoryResponse:
+            type: object
+            properties:
+                category:
+                    $ref: '#/components/schemas/thmanyah.v1.Category'
+        thmanyah.v1.GetEpisodeResponse:
+            type: object
+            properties:
+                episode:
+                    $ref: '#/components/schemas/thmanyah.v1.Episode'
+        thmanyah.v1.GetProgramResponse:
+            type: object
+            properties:
+                program:
+                    $ref: '#/components/schemas/thmanyah.v1.Program'
+        thmanyah.v1.ImportDataRequest:
+            type: object
+            properties:
+                source_type:
+                    type: string
+                source_url:
+                    type: string
+                source_config:
+                    type: object
+                    additionalProperties:
+                        type: string
+                default_category_id:
+                    type: string
+                dry_run:
+                    type: boolean
+                field_mapping:
+                    type: object
+                    additionalProperties:
+                        type: string
+        thmanyah.v1.ImportDataResponse:
+            type: object
+            properties:
+                import_id:
+                    type: string
+                status:
+                    enum:
+                        - IMPORT_STATUS_PENDING
+                        - IMPORT_STATUS_PROCESSING
+                        - IMPORT_STATUS_COMPLETED
+                        - IMPORT_STATUS_FAILED
+                    type: string
+                    format: enum
+                message:
+                    type: string
+                total_items:
+                    type: integer
+                    format: int32
+                processed_items:
+                    type: integer
+                    format: int32
+                success_count:
+                    type: integer
+                    format: int32
+                error_count:
+                    type: integer
+                    format: int32
+                warnings:
+                    type: array
+                    items:
+                        type: string
+        thmanyah.v1.ListCategoriesResponse:
+            type: object
+            properties:
+                categories:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/thmanyah.v1.Category'
+                total_count:
+                    type: integer
+                    format: int32
+                page:
+                    type: integer
+                    format: int32
+                page_size:
+                    type: integer
+                    format: int32
+        thmanyah.v1.ListEpisodesResponse:
+            type: object
+            properties:
+                episodes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/thmanyah.v1.Episode'
+                total_count:
+                    type: integer
+                    format: int32
+                page:
+                    type: integer
+                    format: int32
+                page_size:
+                    type: integer
+                    format: int32
+        thmanyah.v1.ListProgramsResponse:
+            type: object
+            properties:
+                programs:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/thmanyah.v1.Program'
+                total_count:
+                    type: integer
+                    format: int32
+                page:
+                    type: integer
+                    format: int32
+                page_size:
+                    type: integer
+                    format: int32
+        thmanyah.v1.LoginRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+                password:
+                    type: string
+        thmanyah.v1.LoginResponse:
+            type: object
+            properties:
+                access_token:
+                    type: string
+                user:
+                    $ref: '#/components/schemas/thmanyah.v1.User'
+        thmanyah.v1.Program:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                description:
+                    type: string
+                category_id:
+                    type: string
+                status:
+                    enum:
+                        - PROGRAM_STATUS_DRAFT
+                        - PROGRAM_STATUS_PUBLISHED
+                        - PROGRAM_STATUS_ARCHIVED
+                    type: string
+                    format: enum
+                created_at:
+                    type: string
+                    format: date-time
+                updated_at:
+                    type: string
+                    format: date-time
+                published_at:
+                    type: string
+                    format: date-time
+                created_by:
+                    type: string
+                updated_by:
+                    type: string
+                thumbnail_url:
+                    type: string
+                tags:
+                    type: array
+                    items:
+                        type: string
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+                source_url:
+                    type: string
+                episodes_count:
+                    type: integer
+                    format: int32
+                is_featured:
+                    type: boolean
+                view_count:
+                    type: integer
+                    format: int32
+                rating:
+                    type: number
+                    format: double
+        thmanyah.v1.RefreshTokenRequest:
+            type: object
+            properties:
+                refresh_token:
+                    type: string
+        thmanyah.v1.RefreshTokenResponse:
+            type: object
+            properties:
+                access_token:
+                    type: string
+                refresh_token:
+                    type: string
+        thmanyah.v1.RegisterRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+                password:
+                    type: string
+                confirm_password:
+                    type: string
+                name:
+                    type: string
+        thmanyah.v1.RegisterResponse:
+            type: object
+            properties:
+                access_token:
+                    type: string
+                user:
+                    $ref: '#/components/schemas/thmanyah.v1.User'
+        thmanyah.v1.SearchRequest:
+            type: object
+            properties:
+                query:
+                    type: string
+                page:
+                    type: integer
+                    format: int32
+                page_size:
+                    type: integer
+                    format: int32
+        thmanyah.v1.SearchResponse:
+            type: object
+            properties:
+                categories:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/thmanyah.v1.Category'
+                programs:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/thmanyah.v1.Program'
+                episodes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/thmanyah.v1.Episode'
+                total_count:
+                    type: integer
+                    format: int32
+                page:
+                    type: integer
+                    format: int32
+                page_size:
+                    type: integer
+                    format: int32
+                total_pages:
+                    type: integer
+                    format: int32
+        thmanyah.v1.Socials:
+            type: object
+            properties:
+                twitter:
+                    type: string
+                github:
+                    type: string
+                linkedin:
+                    type: string
+        thmanyah.v1.UpdateCategoryRequest:
+            type: object
+            properties:
+                category_id:
+                    type: string
+                name:
+                    type: string
+                description:
+                    type: string
+                type:
+                    enum:
+                        - CATEGORY_TYPE_PODCAST
+                        - CATEGORY_TYPE_DOCUMENTARY
+                        - CATEGORY_TYPE_SPORTS_EVENT
+                        - CATEGORY_TYPE_EDUCATIONAL
+                        - CATEGORY_TYPE_NEWS
+                        - CATEGORY_TYPE_ENTERTAINMENT
+                    type: string
+                    format: enum
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+        thmanyah.v1.UpdateCategoryResponse:
+            type: object
+            properties:
+                category:
+                    $ref: '#/components/schemas/thmanyah.v1.Category'
+        thmanyah.v1.UpdateEpisodeRequest:
+            type: object
+            properties:
+                episode_id:
+                    type: string
+                title:
+                    type: string
+                description:
+                    type: string
+                duration_seconds:
+                    type: integer
+                    format: int32
+                episode_number:
+                    type: integer
+                    format: int32
+                season_number:
+                    type: integer
+                    format: int32
+                status:
+                    enum:
+                        - EPISODE_STATUS_DRAFT
+                        - EPISODE_STATUS_PUBLISHED
+                        - EPISODE_STATUS_SCHEDULED
+                        - EPISODE_STATUS_ARCHIVED
+                    type: string
+                    format: enum
+                media_url:
+                    type: string
+                thumbnail_url:
+                    type: string
+                tags:
+                    type: array
+                    items:
+                        type: string
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+                scheduled_at:
+                    type: string
+                    format: date-time
+        thmanyah.v1.UpdateEpisodeResponse:
+            type: object
+            properties:
+                episode:
+                    $ref: '#/components/schemas/thmanyah.v1.Episode'
+        thmanyah.v1.UpdateProgramRequest:
+            type: object
+            properties:
+                program_id:
+                    type: string
+                title:
+                    type: string
+                description:
+                    type: string
+                category_id:
+                    type: string
+                status:
+                    enum:
+                        - PROGRAM_STATUS_DRAFT
+                        - PROGRAM_STATUS_PUBLISHED
+                        - PROGRAM_STATUS_ARCHIVED
+                    type: string
+                    format: enum
+                thumbnail_url:
+                    type: string
+                tags:
+                    type: array
+                    items:
+                        type: string
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+                source_url:
+                    type: string
+                is_featured:
+                    type: boolean
+        thmanyah.v1.UpdateProgramResponse:
+            type: object
+            properties:
+                program:
+                    $ref: '#/components/schemas/thmanyah.v1.Program'
+        thmanyah.v1.UpdateUserRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                position:
+                    type: string
+                socials:
+                    $ref: '#/components/schemas/thmanyah.v1.Socials'
+        thmanyah.v1.UpdateUserResponse:
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/thmanyah.v1.User'
+        thmanyah.v1.User:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                email:
+                    type: string
+                created_at:
+                    type: string
+                updated_at:
+                    type: string
+        thmanyah.v1.UserProfileResponse:
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/thmanyah.v1.User'
+    securitySchemes:
+        bearerAuth:
+            type: http
+            description: Enter JWT Bearer token
+            scheme: bearer
+            bearerFormat: JWT
+tags:
+    - name: AuthService
+    - name: CmsService
+    - name: DiscoverService

@@ -1,0 +1,48 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "geeksquest/internal/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  Server server = 1;
+  Data data = 2;
+}
+
+message Server {
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  message GRPC {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  HTTP http = 1;
+  GRPC grpc = 2;
+}
+
+message Database {
+  string host = 1;
+  string user = 2;
+  string password = 3;
+  string dbname = 4;
+  int64 port = 5;
+}
+
+message S3 {
+  string host = 1;
+  string access_key = 2;
+  string secret_key = 3;
+  string region = 4;
+  repeated string initial_buckets = 5;
+  string files_host = 6;
+}
+
+message Data {
+  Database postgres = 1;
+  S3 s3 = 3;
+}

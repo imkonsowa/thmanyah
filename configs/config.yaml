@@ -1,0 +1,22 @@
+server:
+  http:
+    addr: 0.0.0.0:8000
+    timeout: 60s
+  grpc:
+    addr: 0.0.0.0:8001
+    timeout: 60s
+data:
+  postgres:
+    host: "${DB_HOST}"
+    port: 5432
+    user: postgres
+    password: "${DB_PASSWORD}"
+    dbname: thmanyah
+    sslmode: disable
+  s3:
+    host: "${S3_HOST}"
+    access_key: "${S3_ACCESS_KEY}"
+    secret_key: "${S3_SECRET_KEY}"
+    initial_buckets:
+      - thmanyah
+
