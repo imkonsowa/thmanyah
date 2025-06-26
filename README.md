@@ -62,6 +62,15 @@ Clean architecture with three distinct layers:
 - **Config**: `cmd/app/wire.go`
 - **Generation**: `make generate`
 
+### Database Schema
+The ERD is available under `assets/thmanyah.png`
+The database follows a normalized design with the following key entities:
+- **Users**: Authentication and user management
+- **Categories**: Content organization and classification
+- **Programs**: Main content containers (podcasts, shows, etc.)
+- **Episodes**: Individual content items belonging to programs
+- **Import**: Bulk data import tracking and management
+
 ## Quick Start
 
 ### Prerequisites
