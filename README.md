@@ -418,10 +418,7 @@ curl -X POST "$API_BASE/discover/search" \
 ### 7. Get Featured Programs
 
 ```bash
-curl -X POST "$API_BASE/discover/featured" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $ACCESS_TOKEN" \
-  -d '{}'
+curl -X GET "$API_BASE/discover/featured"
 ```
 
 ### Future Improvements
