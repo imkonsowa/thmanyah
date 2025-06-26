@@ -5,7 +5,6 @@ import (
 	http2 "net/http"
 	"net/url"
 	"os"
-	"strings"
 	"time"
 
 	v1 "thmanyah/api/grpc/v1"
@@ -25,7 +24,6 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport"
 	jwt2 "github.com/golang-jwt/jwt/v5"
-	"github.com/gorilla/handlers"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 
@@ -119,38 +117,6 @@ func NewHTTPServer(
 	if c.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
-
-	opts = append(opts, http.Filter(
-		handlers.CORS(
-			handlers.AllowCredentials(),
-			handlers.AllowedOriginValidator(func(s string) bool {
-				if s == "http://localhost:3000" || s == "https://localhost:3000" {
-					return true
-				}
-
-				if strings.HasSuffix(s, "geeks.local") || strings.HasSuffix(s, "geeks.quest") {
-					return true
-				}
-
-				return false
-			}),
-			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
-			handlers.AllowedHeaders([]string{
-				"Content-Type",
-				"Content-Length",
-				"Accept-Encoding",
-				"X-CSRF-Token",
-				"Authorization",
-				"accept",
-				"origin",
-				"Cache-Control",
-				"X-Requested-With",
-				"X-Platform",
-			}),
-			handlers.ExposedHeaders([]string{"Content-Length"}),
-			handlers.MaxAge(12*3600), // Set preflight cache duration (in seconds)
-		),
-	))
 
 	opts = append(opts, http.ResponseEncoder(CustomResponseEncoder))
 	srv := http.NewServer(
@@ -340,26 +306,9 @@ func WithCookieMaxAge(maxAge int) Option {
 	}
 }
 
-func setSecurityHeaders(hw http.ResponseWriter) {
-	hw.Header().Set("X-Content-Type-Options", "nosniff")
-	hw.Header().Set("X-Frame-Options", "DENY")
-	hw.Header().Set("Cache-Control", "no-store")
-}
-
 func getSameSiteMode(isProduction bool) http2.SameSite {
 	if isProduction {
 		return http2.SameSiteStrictMode
 	}
 	return http2.SameSiteNoneMode
-}
-
-func extractRootDomain(hostname string) string {
-	parts := strings.Split(hostname, ".")
-	if len(parts) <= 2 {
-		// If there are only two or fewer parts, it's likely already the root domain
-		return hostname
-	}
-
-	// Return the last two parts (e.g., "geeks.quest" from "malik.geeks.quest")
-	return strings.Join(parts[len(parts)-2:], ".")
 }
